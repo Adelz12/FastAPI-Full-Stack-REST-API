@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  fastapi-app:
+    # نستخدم متغير TAG لنتمكن من تغيير الإصدار بسهولة عند التشغيل
+    image: harbor.fintechsys.net/test-adel-zawiah/fastapi-app:${TAG:-latest}
+    container_name: fastapi-app-container
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    # إذا كان مشروعك يحتاج بيئة عمل (Environment Variables) أضفها هنا
+    environment:
+      - DATABASE_URL=postgresql://user:password@localhost:5432/db_name
+      - REDIS_URL=redis://localhost:6379
