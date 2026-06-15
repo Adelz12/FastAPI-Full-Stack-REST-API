@@ -163,3 +163,8 @@ The `/items/` GET endpoint uses Redis to cache results per user for **60 seconds
 | `SECRET_KEY` | JWT signing secret | — |
 | `ALGORITHM` | JWT algorithm | `HS256` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Token expiry duration | `30` |
+
+
+---------
+
+lets go 
