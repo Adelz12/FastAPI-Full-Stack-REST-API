@@ -1,14 +1,35 @@
-version: '3.8'
-
 services:
   fastapi-app:
-    # نستخدم متغير TAG لنتمكن من تغيير الإصدار بسهولة عند التشغيل
     image: harbor.fintechsys.net/test-adel-zawiah/fastapi-app:${TAG:-latest}
     container_name: fastapi-app-container
     ports:
       - "8000:8000"
     restart: unless-stopped
-    # إذا كان مشروعك يحتاج بيئة عمل (Environment Variables) أضفها هنا
     environment:
-      - DATABASE_URL=postgresql://user:password@localhost:5432/db_name
-      - REDIS_URL=redis://localhost:6379
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres123@db:5432/fastapi_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=3ec66497f6c382bf832a823b8fca8a4de93a9cf41d2f099182312b9d62886f7c
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15
+    container_name: postgres-container
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+      - POSTGRES_DB=fastapi_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-container
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
